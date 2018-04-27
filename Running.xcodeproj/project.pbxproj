@@ -14,6 +14,12 @@
 		AB1B637A2093681A00D52B95 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63782093681A00D52B95 /* LaunchScreen.storyboard */; };
 		AB1B63852093681A00D52B95 /* RunningTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1B63842093681A00D52B95 /* RunningTests.swift */; };
 		AB1B63902093681A00D52B95 /* RunningUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1B638F2093681A00D52B95 /* RunningUITests.swift */; };
+		AB1B639E2093692000D52B95 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1B639D2093692000D52B95 /* TableViewController.swift */; };
+		AB1B63A12093732500D52B95 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1B63A02093732500D52B95 /* AVFoundation.framework */; };
+		AB1B63A920937DC000D52B95 /* bip.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A520937AD500D52B95 /* bip.m4a */; };
+		AB1B63AA20937DC000D52B95 /* bip2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A820937AEC00D52B95 /* bip2.m4a */; };
+		AB1B63AB20937DC000D52B95 /* bip3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A620937AEC00D52B95 /* bip3.m4a */; };
+		AB1B63AC20937DC000D52B95 /* bip4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A720937AEC00D52B95 /* bip4.m4a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +53,12 @@
 		AB1B638B2093681A00D52B95 /* RunningUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunningUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB1B638F2093681A00D52B95 /* RunningUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningUITests.swift; sourceTree = "<group>"; };
 		AB1B63912093681A00D52B95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB1B639D2093692000D52B95 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
+		AB1B63A02093732500D52B95 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		AB1B63A520937AD500D52B95 /* bip.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = bip.m4a; path = ../../../../Desktop/bip.m4a; sourceTree = "<group>"; };
+		AB1B63A620937AEC00D52B95 /* bip3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip3.m4a; sourceTree = "<group>"; };
+		AB1B63A720937AEC00D52B95 /* bip4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip4.m4a; sourceTree = "<group>"; };
+		AB1B63A820937AEC00D52B95 /* bip2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip2.m4a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB1B63A12093732500D52B95 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +94,7 @@
 				AB1B63832093681A00D52B95 /* RunningTests */,
 				AB1B638E2093681A00D52B95 /* RunningUITests */,
 				AB1B636D2093681A00D52B95 /* Products */,
+				AB1B639F2093732500D52B95 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,10 +113,12 @@
 			children = (
 				AB1B636F2093681A00D52B95 /* AppDelegate.swift */,
 				AB1B63712093681A00D52B95 /* ViewController.swift */,
+				AB1B639D2093692000D52B95 /* TableViewController.swift */,
 				AB1B63732093681A00D52B95 /* Main.storyboard */,
 				AB1B63762093681A00D52B95 /* Assets.xcassets */,
 				AB1B63782093681A00D52B95 /* LaunchScreen.storyboard */,
 				AB1B637B2093681A00D52B95 /* Info.plist */,
+				AB1B63A420937AA300D52B95 /* Sounds */,
 			);
 			path = Running;
 			sourceTree = "<group>";
@@ -123,6 +139,25 @@
 				AB1B63912093681A00D52B95 /* Info.plist */,
 			);
 			path = RunningUITests;
+			sourceTree = "<group>";
+		};
+		AB1B639F2093732500D52B95 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				AB1B63A02093732500D52B95 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AB1B63A420937AA300D52B95 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				AB1B63A520937AD500D52B95 /* bip.m4a */,
+				AB1B63A820937AEC00D52B95 /* bip2.m4a */,
+				AB1B63A620937AEC00D52B95 /* bip3.m4a */,
+				AB1B63A720937AEC00D52B95 /* bip4.m4a */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,6 +267,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB1B63A920937DC000D52B95 /* bip.m4a in Resources */,
+				AB1B63AA20937DC000D52B95 /* bip2.m4a in Resources */,
+				AB1B63AB20937DC000D52B95 /* bip3.m4a in Resources */,
+				AB1B63AC20937DC000D52B95 /* bip4.m4a in Resources */,
 				AB1B637A2093681A00D52B95 /* LaunchScreen.storyboard in Resources */,
 				AB1B63772093681A00D52B95 /* Assets.xcassets in Resources */,
 				AB1B63752093681A00D52B95 /* Main.storyboard in Resources */,
@@ -260,6 +299,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AB1B63722093681A00D52B95 /* ViewController.swift in Sources */,
+				AB1B639E2093692000D52B95 /* TableViewController.swift in Sources */,
 				AB1B63702093681A00D52B95 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

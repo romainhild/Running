@@ -12,7 +12,7 @@ import AVFoundation
 class TableViewController: UITableViewController {
     var soundList: [String] = ["bip", "bip2", "bip3", "bip4"]
     var soundsId: [SystemSoundID] = []
-    var timesSpeeds: [(String,Double,String,UIColor)] = []
+    var timesSpeeds: [(String,Int,String,UIColor)] = []
     
     var timer = Timer()
     let timeInterval = 0.1
@@ -68,21 +68,23 @@ class TableViewController: UITableViewController {
         let cell0 = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
         let cell1 = tableView.cellForRow(at: IndexPath(row: 1, section: 0))
         counter += timeInterval
-        if counter >= timesSpeeds[0].1 {
+        if counter >= Double(timesSpeeds[0].1) {
             counterFromStart += counter
             counter = 0.0
             if timesSpeeds.count > 1 {
                 playSpeed(speed: timesSpeeds[1].2)
             } else {
                 timer.invalidate()
-                counter = counterFromStart - timeInterval
+                counter = counterFromStart
                 counterFromStart = 0.0
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
             }
             self.timesSpeeds.remove(at: 0)
             self.tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
         }
-        cell0?.textLabel?.text = doubleToString(time: counterFromStart)
-        cell1?.textLabel?.text = doubleToString(time: counter)
+        cell0?.textLabel?.text = self.doubleToString(time: self.counterFromStart)
+        cell1?.textLabel?.text = self.doubleToString(time: self.counter)
     }
     
     func playSpeed(speed: String) {
@@ -128,18 +130,31 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "runningCell", for: indexPath)
-        if indexPath.row > 1 {
+        cell.textLabel?.font = UIFont.systemFont(ofSize: UIFont.labelFontSize)
+        cell.textLabel?.adjustsFontSizeToFitWidth = false
+        cell.contentView.backgroundColor = UIColor.white
+        cell.textLabel?.backgroundColor = UIColor.white
+        if indexPath.row == 0 {
+            cell.contentView.backgroundColor = UIColor.white
+            cell.textLabel?.backgroundColor = UIColor.white
+            cell.textLabel?.text = doubleToString(time: counterFromStart)
+        } else if indexPath.row == 1 {
+            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 80)
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            if timesSpeeds.count > 0 {
+                cell.textLabel?.backgroundColor = timesSpeeds[0].3
+                cell.contentView.backgroundColor = timesSpeeds[0].3
+            } else {
+                cell.contentView.backgroundColor = UIColor.white
+                cell.textLabel?.backgroundColor = UIColor.white
+            }
+            cell.textLabel?.text = doubleToString(time: counter)
+        } else {
             let timeSpeed = timesSpeeds[indexPath.row-2]
             cell.textLabel?.text = "\(timeSpeed.0)"
             cell.contentView.backgroundColor = timeSpeed.3
-        } else {
-            cell.textLabel?.text = "0s"
+            cell.textLabel?.backgroundColor = timeSpeed.3
         }
-        if indexPath.row == 1 {
-            cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 80)
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-        }
-     
         return cell
     }
     

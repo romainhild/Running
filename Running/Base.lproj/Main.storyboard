@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="o1u-zP-SKI">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="o1u-zP-SKI">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,7 +27,7 @@
                                 </connections>
                             </pickerView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NgV-qW-Jeh">
-                                <rect key="frame" x="16" y="282" width="343" height="327"/>
+                                <rect key="frame" x="16" y="282" width="343" height="324"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="mycell" textLabel="Irb-cS-b0C" rowHeight="67" style="IBUITableViewCellStyleDefault" id="nmT-lZ-yhg">
@@ -65,14 +65,21 @@
                                 <rect key="frame" x="8" y="244" width="359" height="30"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Uhv-Cu-18g" userLabel="Add">
-                                        <rect key="frame" x="0.0" y="0.0" width="175.5" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="114.5" height="30"/>
                                         <state key="normal" title="Add"/>
                                         <connections>
                                             <action selector="addTime:" destination="o1u-zP-SKI" eventType="touchUpInside" id="2wH-6W-TjW"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yb1-so-SrB">
+                                        <rect key="frame" x="122.5" y="0.0" width="114" height="30"/>
+                                        <state key="normal" title="Copy"/>
+                                        <connections>
+                                            <action selector="copyRows:" destination="o1u-zP-SKI" eventType="touchUpInside" id="H2K-a5-qfu"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FOz-Y2-Xvo">
-                                        <rect key="frame" x="183.5" y="0.0" width="175.5" height="30"/>
+                                        <rect key="frame" x="244.5" y="0.0" width="114.5" height="30"/>
                                         <state key="normal" title="Edit"/>
                                         <connections>
                                             <action selector="editTableView:" destination="o1u-zP-SKI" eventType="touchUpInside" id="FXT-I9-hPn"/>
@@ -80,39 +87,54 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9Y-Lf-qsN">
-                                <rect key="frame" x="172" y="617" width="30" height="30"/>
-                                <state key="normal" title="Run"/>
-                                <connections>
-                                    <segue destination="jQy-Tb-Pqa" kind="presentation" identifier="runningSegue" id="fC3-ow-gb6"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="nfd-p9-AjP">
+                                <rect key="frame" x="16" y="614" width="343" height="33"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFD-yd-iUn">
+                                        <rect key="frame" x="0.0" y="0.0" width="171.5" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9Y-Lf-qsN">
+                                        <rect key="frame" x="171.5" y="0.0" width="171.5" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Run"/>
+                                        <connections>
+                                            <segue destination="jQy-Tb-Pqa" kind="presentation" identifier="runningSegue" id="fC3-ow-gb6"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="uqW-dE-CFn" firstAttribute="width" secondItem="jeP-4S-FfW" secondAttribute="width" id="22A-cU-tFR"/>
                             <constraint firstItem="jeP-4S-FfW" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" id="9db-yz-DHj"/>
                             <constraint firstItem="NgV-qW-Jeh" firstAttribute="leading" secondItem="N3L-3h-EQL" secondAttribute="leading" constant="16" id="9iL-mG-Ymm"/>
-                            <constraint firstItem="k9Y-Lf-qsN" firstAttribute="top" secondItem="NgV-qW-Jeh" secondAttribute="bottom" constant="8" id="LCF-0e-FyM"/>
+                            <constraint firstItem="N3L-3h-EQL" firstAttribute="trailing" secondItem="nfd-p9-AjP" secondAttribute="trailing" constant="16" id="EX4-h1-Sb3"/>
+                            <constraint firstItem="nfd-p9-AjP" firstAttribute="top" secondItem="NgV-qW-Jeh" secondAttribute="bottom" constant="8" id="ORW-pN-Kmq"/>
                             <constraint firstItem="qIm-0L-bku" firstAttribute="top" secondItem="jeP-4S-FfW" secondAttribute="bottom" constant="8" id="OVa-Qq-Wlh"/>
                             <constraint firstItem="uqW-dE-CFn" firstAttribute="height" secondItem="jeP-4S-FfW" secondAttribute="height" id="Ogl-cw-7oW"/>
                             <constraint firstItem="NgV-qW-Jeh" firstAttribute="top" secondItem="qIm-0L-bku" secondAttribute="bottom" constant="8" id="Q9f-SO-pWK"/>
                             <constraint firstItem="uqW-dE-CFn" firstAttribute="leading" secondItem="jeP-4S-FfW" secondAttribute="trailing" constant="8" id="YEO-VA-QyV"/>
                             <constraint firstItem="uqW-dE-CFn" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" id="aSQ-vu-Jka"/>
                             <constraint firstItem="N3L-3h-EQL" firstAttribute="trailing" secondItem="qIm-0L-bku" secondAttribute="trailing" constant="8" id="cD1-CQ-RMK"/>
+                            <constraint firstItem="N3L-3h-EQL" firstAttribute="bottom" secondItem="nfd-p9-AjP" secondAttribute="bottom" constant="20" id="g3Z-tY-k0q"/>
                             <constraint firstItem="jeP-4S-FfW" firstAttribute="leading" secondItem="N3L-3h-EQL" secondAttribute="leading" id="jin-Mb-gDN"/>
                             <constraint firstItem="N3L-3h-EQL" firstAttribute="trailing" secondItem="uqW-dE-CFn" secondAttribute="trailing" constant="16" id="kbk-1p-PhJ"/>
                             <constraint firstItem="N3L-3h-EQL" firstAttribute="trailing" secondItem="NgV-qW-Jeh" secondAttribute="trailing" constant="16" id="o7g-EU-EC6"/>
-                            <constraint firstItem="k9Y-Lf-qsN" firstAttribute="centerX" secondItem="d92-M2-Unp" secondAttribute="centerX" id="oiX-xV-Yrx"/>
-                            <constraint firstItem="N3L-3h-EQL" firstAttribute="bottom" secondItem="k9Y-Lf-qsN" secondAttribute="bottom" constant="20" id="otE-7m-ES1"/>
+                            <constraint firstItem="nfd-p9-AjP" firstAttribute="leading" secondItem="N3L-3h-EQL" secondAttribute="leading" constant="16" id="qNN-Wj-db7"/>
                             <constraint firstItem="qIm-0L-bku" firstAttribute="leading" secondItem="N3L-3h-EQL" secondAttribute="leading" constant="8" id="sfE-Rg-FmU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="N3L-3h-EQL"/>
                     </view>
                     <connections>
+                        <outlet property="copyButton" destination="Yb1-so-SrB" id="haa-Q7-wxY"/>
                         <outlet property="speedPickerView" destination="uqW-dE-CFn" id="BTH-RM-ANV"/>
                         <outlet property="tableView" destination="NgV-qW-Jeh" id="jXR-0U-Pkg"/>
                         <outlet property="timePickerView" destination="jeP-4S-FfW" id="wQT-dk-fnJ"/>
+                        <outlet property="totalLabel" destination="BFD-yd-iUn" id="oL2-AT-c2u"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rv5-ZB-jBh" userLabel="First Responder" sceneMemberID="firstResponder"/>

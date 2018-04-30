@@ -9,30 +9,39 @@
 import UIKit
 import AVFoundation
 
+enum Speed: String {
+    case walk = "Walk"
+    case slow = "Slow"
+    case easy = "Easy"
+    case hard = "Hard"
+}
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var chevronView: ChevronView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var totalLabel: UILabel!
     
-    let times: [String] = ["30s", "1m", "1m30", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m", "11m", "12m"]
-    let timesD: [Int] = [30, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720]
-    let speeds: [String] = ["Walk", "Slow", "Easy", "Hard"]
-    let speedsC: [UIColor] = [UIColor.yellow, UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1),
-                              UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1), UIColor.red]
-    var selectedTimes: [(String,Int,String,UIColor)] = []
+//    let times: [String] = ["30s", "1m", "1m30", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m", "11m", "12m"]
+//    let timesD: [Int] = [30, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720]
+//    let speeds: [Int] = [0,1,2,3]
+//    let speedsString: [String] = ["Walk", "Slow", "Easy", "Hard"]
+//    let speedsC: [UIColor] = [UIColor.yellow, UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1),
+//                              UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1), UIColor.red]
+//    var selectedTimes: [(String,Int,String,UIColor)] = []
+    var selectedTimesAndSpeeds: [(Int,Speed)] = []
     
     var isEditingTableView: Bool = false
     var totalTime: Int {
         get {
-            return selectedTimes.reduce(0) { $0 + $1.1}
+            return selectedTimesAndSpeeds.reduce(0) { $0 + $1.0}
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        totalLabel.text = doubleToTime(time: totalTime)
+        totalLabel.text = intToTime(time: totalTime)
         self.navigationItem.leftBarButtonItem?.isEnabled = false
         tableView.allowsMultipleSelection = true
         tableView.contentOffset = CGPoint(x: 0, y: tableView.contentSize.height)
@@ -59,7 +68,7 @@ class ViewController: UIViewController {
 //        if tableView.frame.height < tableView.contentSize.height + 44 {
 //            tableView.scrollToRow(at: index, at: .bottom, animated: true)
 //        }
-//        totalLabel.text = doubleToTime(time: totalTime)
+//        totalLabel.text = intToTime(time: totalTime)
     }
     
     @IBAction func editTableView(_ sender: Any) {
@@ -72,8 +81,8 @@ class ViewController: UIViewController {
         let rows = tableView.indexPathsForSelectedRows!.map { $0.row }
         var indexes: [IndexPath] = []
         for row in rows {
-            indexes.append(IndexPath(row: selectedTimes.count, section: 0))
-            selectedTimes.append(selectedTimes[row])
+            indexes.append(IndexPath(row: selectedTimesAndSpeeds.count, section: 0))
+            selectedTimesAndSpeeds.append(selectedTimesAndSpeeds[row])
         }
         tableView.beginUpdates()
         tableView.insertRows(at: indexes, with: .automatic)
@@ -81,21 +90,21 @@ class ViewController: UIViewController {
         if tableView.frame.height < tableView.contentSize.height + CGFloat(44*indexes.count) {
             tableView.scrollToRow(at: indexes.last!, at: .bottom, animated: true)
         }
-        totalLabel.text = doubleToTime(time: totalTime)
+        totalLabel.text = intToTime(time: totalTime)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "runningSegue" {
-            let navbar = segue.destination as? UINavigationController
-            let runningController = navbar?.topViewController as? TableViewController
-            runningController?.timesSpeeds = selectedTimes
+//            let navbar = segue.destination as? UINavigationController
+//            let runningController = navbar?.topViewController as? TableViewController
+            let runningController = segue.destination as? TableViewController
+            runningController?.timesSpeeds = selectedTimesAndSpeeds
         }
     }
     
-    func doubleToTime(time: Int) -> String {
+    func intToTime(time: Int) -> String {
         let m: Int = time/60
         let s: Int = time % 60
-//         let s: Int = time.truncatingRemainder(dividingBy: 60)
         var t: String = "0s"
         if m > 0 {
             if s > 0 {
@@ -126,28 +135,28 @@ extension ViewController : UITableViewDelegate {
 
 extension ViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return selectedTimes.count
+        return selectedTimesAndSpeeds.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath)
-        let timeSpeed = selectedTimes[indexPath.row]
-        cell.textLabel?.text = "\(timeSpeed.0) \(timeSpeed.2)"
+        let timeSpeed = selectedTimesAndSpeeds[indexPath.row]
+        cell.textLabel?.text = "\(intToTime(time: timeSpeed.0)) \(timeSpeed.1.rawValue)"
         cell.showsReorderControl = isEditingTableView
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.selectedTimes.remove(at: indexPath.row)
+            self.selectedTimesAndSpeeds.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            totalLabel.text = doubleToTime(time: totalTime)
+            totalLabel.text = intToTime(time: totalTime)
         }
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let timeToMove = selectedTimes.remove(at: sourceIndexPath.row)
-        selectedTimes.insert(timeToMove, at: destinationIndexPath.row)
+        let timeToMove = selectedTimesAndSpeeds.remove(at: sourceIndexPath.row)
+        selectedTimesAndSpeeds.insert(timeToMove, at: destinationIndexPath.row)
     }
 }
 
@@ -158,6 +167,30 @@ extension ViewController : UIGestureRecognizerDelegate {
             transform = CATransform3DRotate(transform, recognizer.angle, 0.0, 0.0, 1.0);
             transform = CATransform3DTranslate(transform, 0, recognizer.view!.layer.bounds.height/10.0*CGFloat(recognizer.level), 0)
             chevronView.layer.sublayerTransform = transform
+        } else if recognizer.state == .ended {
+            let speed: Speed
+            switch recognizer.level {
+            case 0:
+                speed = .walk
+            case 1:
+                speed = .slow
+            case 2:
+                speed = .easy
+            default:
+                speed = .hard
+            }
+            let time = recognizer.alpha
+            print("\(intToTime(time: time*30)) \(speed.rawValue)")
+            selectedTimesAndSpeeds.append((time*30,speed))
+            let index = IndexPath(row: selectedTimesAndSpeeds.count-1, section: 0)
+            tableView.beginUpdates()
+            tableView.insertRows(at: [index], with: .automatic)
+            tableView.endUpdates()
+            if tableView.frame.height < tableView.contentSize.height + 44 {
+                tableView.scrollToRow(at: index, at: .bottom, animated: true)
+            }
+            totalLabel.text = intToTime(time: totalTime)
+            chevronView.layer.sublayerTransform = CATransform3DIdentity
         } else {
             chevronView.layer.sublayerTransform = CATransform3DIdentity
         }

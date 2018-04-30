@@ -10,14 +10,18 @@ import UIKit
 import AVFoundation
 
 class TableViewController: UITableViewController {
-    var soundList: [String] = ["bip", "bip2", "bip3", "bip4"]
-    var soundsId: [SystemSoundID] = []
-    var timesSpeeds: [(String,Int,String,UIColor)] = []
+    let soundList: [Speed: String] = [.walk: "bip", .slow: "bip2", .easy: "bip3", .hard: "bip4"]
+    var soundsId: [Speed: SystemSoundID] = [:]
+    let colorList: [Speed: UIColor] = [ .walk: UIColor.yellow,
+                                        .slow: UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1),
+                                        .easy: UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1),
+                                        .hard: UIColor.red]
+    var timesSpeeds: [(Int,Speed)] = []
     
     var timer = Timer()
     let timeInterval = 0.1
     var counter = 0.0
-    var counterFromStart = 0.0
+    var counterFromStart: Int = 0
     var isRunning = false
     
     override func viewDidLoad() {
@@ -29,12 +33,12 @@ class TableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "runningCell")
-        for sound in soundList {
+        for (speed,sound) in soundList {
             let path = Bundle.main.path(forResource: "\(sound)", ofType:"m4a")!
             let url = URL(fileURLWithPath: path)
             var soundId: SystemSoundID = 0
             AudioServicesCreateSystemSoundID(url as CFURL, &soundId)
-            soundsId.append(soundId)
+            soundsId[speed] = soundId
         }
         if timesSpeeds.count == 0 {
             self.navigationItem.rightBarButtonItem?.isEnabled = false
@@ -46,15 +50,10 @@ class TableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func doneRunning(_ sender: Any) {
-        timer.invalidate()
-        dismiss(animated: true, completion: nil)
-    }
-    
     @IBAction func startRunning(_ sender: Any) {
         if !isRunning {
             timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-            playSpeed(speed: timesSpeeds[0].2)
+            playSpeed(speed: timesSpeeds[0].1)
             isRunning = true
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .pause, target: self, action: #selector(startRunning(_:)))
         } else {
@@ -68,39 +67,46 @@ class TableViewController: UITableViewController {
         let cell0 = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
         let cell1 = tableView.cellForRow(at: IndexPath(row: 1, section: 0))
         counter += timeInterval
-        if counter >= Double(timesSpeeds[0].1) {
-            counterFromStart += counter
+        if counter >= Double(timesSpeeds[0].0) {
+            counterFromStart += Int(counter)
             counter = 0.0
             if timesSpeeds.count > 1 {
-                playSpeed(speed: timesSpeeds[1].2)
+                playSpeed(speed: timesSpeeds[1].1)
             } else {
                 timer.invalidate()
-                counter = counterFromStart
-                counterFromStart = 0.0
+                counter = Double(counterFromStart)
+                counterFromStart = 0
                 self.navigationItem.rightBarButtonItem?.isEnabled = false
             }
             self.timesSpeeds.remove(at: 0)
             self.tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
             self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
         }
-        cell0?.textLabel?.text = self.doubleToString(time: self.counterFromStart)
-        cell1?.textLabel?.text = self.doubleToString(time: self.counter)
+        cell0?.textLabel?.text = self.intToTime(time: self.counterFromStart)
+        cell1?.textLabel?.text = self.doubleToTime(time: self.counter)
     }
     
-    func playSpeed(speed: String) {
-        switch speed {
-        case "Walk":
-            AudioServicesPlaySystemSound(soundsId[0])
-        case "Slow":
-            AudioServicesPlaySystemSound(soundsId[1])
-        case "Easy":
-            AudioServicesPlaySystemSound(soundsId[2])
-        default:
-            AudioServicesPlaySystemSound(soundsId[3])
+    func playSpeed(speed: Speed) {
+        AudioServicesPlaySystemSound(soundsId[speed]!)
+    }
+    
+    func intToTime(time: Int) -> String {
+        let m: Int = time/60
+        let s: Int = time % 60
+        var t: String = "0s"
+        if m > 0 {
+            if s > 0 {
+                t = String(format: "%dm %ds", m, s)
+            } else {
+                t = String(format: "%dm", m)
+            }
+        } else if s > 0 {
+            t = String(format: "%ds", s)
         }
+        return t
     }
     
-    func doubleToString(time: Double) -> String {
+    func doubleToTime(time: Double) -> String {
         let m: Int = Int(time/60)
         let s: Double = time.truncatingRemainder(dividingBy: 60)
         var t: String = "0s"
@@ -137,23 +143,23 @@ class TableViewController: UITableViewController {
         if indexPath.row == 0 {
             cell.contentView.backgroundColor = UIColor.white
             cell.textLabel?.backgroundColor = UIColor.white
-            cell.textLabel?.text = doubleToString(time: counterFromStart)
+            cell.textLabel?.text = intToTime(time: counterFromStart)
         } else if indexPath.row == 1 {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 80)
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             if timesSpeeds.count > 0 {
-                cell.textLabel?.backgroundColor = timesSpeeds[0].3
-                cell.contentView.backgroundColor = timesSpeeds[0].3
+                cell.textLabel?.backgroundColor = colorList[timesSpeeds[0].1]
+                cell.contentView.backgroundColor = colorList[timesSpeeds[0].1]
             } else {
                 cell.contentView.backgroundColor = UIColor.white
                 cell.textLabel?.backgroundColor = UIColor.white
             }
-            cell.textLabel?.text = doubleToString(time: counter)
+            cell.textLabel?.text = doubleToTime(time: counter)
         } else {
             let timeSpeed = timesSpeeds[indexPath.row-2]
-            cell.textLabel?.text = "\(timeSpeed.0)"
-            cell.contentView.backgroundColor = timeSpeed.3
-            cell.textLabel?.backgroundColor = timeSpeed.3
+            cell.textLabel?.text = intToTime(time: timeSpeed.0)
+            cell.contentView.backgroundColor = colorList[timeSpeed.1]
+            cell.textLabel?.backgroundColor = colorList[timeSpeed.1]
         }
         return cell
     }

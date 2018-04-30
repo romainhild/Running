@@ -12,24 +12,38 @@ import UIKit.UIGestureRecognizerSubclass
 class RunGestureRecognizer: UIGestureRecognizer {
     var angleR: CGFloat = 0.0
     var level: Int = 0
-    let delta = CGFloat.pi/6.0
+    let delta = CGFloat.pi/12.0
     var layer: ChevronLayer { return self.view!.layer.sublayers![1] as! ChevronLayer }
     var width: CGFloat { return layer.bounds.width }
     var height: CGFloat { return layer.bounds.height }
     var center: CGPoint { return CGPoint(x: width/2, y: height/2) }
     var epsilonDistance: CGFloat { return max(width/10, height/10) }
-    var initialCenter: CGPoint { return layer.chevronCenter }
-    var alpha: CGFloat {
-        if angleR > 0 {
-            return CGFloat(Int(angleR/delta))
+    var chevronCenter: CGPoint { return layer.chevronCenter }
+    var initialAngle: CGFloat = 0.0
+    var alpha: Int {
+        let angleP: CGFloat
+        if angleR >= 0 {
+            angleP = angleR
         } else {
-            return CGFloat(Int((angleR+2*CGFloat.pi)/delta))
+            angleP = angleR+2*CGFloat.pi
+        }
+        let a = Int(angleP/delta)
+        if a < 7 {
+            return a
+        } else if a < 22 {
+            return a + a%2
+        } else {
+            return 24
         }
     }
-    var angle: CGFloat { return CGFloat(alpha)*delta }
+    var angle: CGFloat {
+        return CGFloat(alpha)*delta
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-        if touches.count == 1 && isInitialTouch(location: touches.first!.location(in: self.view)) {
+        let touch = touches.first!.location(in: self.view)
+        if touches.count == 1 && isInitialTouch(location: touch) {
+            initialAngle = angle(of: touch)
             state = .began
         } else {
             state = .failed
@@ -39,23 +53,32 @@ class RunGestureRecognizer: UIGestureRecognizer {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent) {
         let newTouch = touches.first
         let newPoint = (newTouch?.location(in: self.view))!
-        self.angleR = -atan2(-(newPoint.x-center.x),
-                             -(newPoint.y-center.y))
-        let r = distance(from: newPoint, to: center)
-        if r < height*2.0/10.0 {
-            self.level = 3
-        } else if r < height*3.0/10.0 {
-            self.level = 2
-        } else if r < height*4.0/10.0 {
-            self.level = 1
+        let oldAlpha = self.alpha
+        self.angleR = angle(of: newPoint)-initialAngle
+        if (oldAlpha != self.alpha) && ((oldAlpha > self.alpha+2) || (oldAlpha < self.alpha-2)) {
+            print("invalid alpha: \(self.alpha) old: \(oldAlpha)")
+            state = .failed
         } else {
-            self.level = 0
+            let r = distance(from: newPoint, to: center)
+            if r < height*2.0/10.0 {
+                self.level = 3
+            } else if r < height*3.0/10.0 {
+                self.level = 2
+            } else if r < height*4.0/10.0 {
+                self.level = 1
+            } else {
+                self.level = 0
+            }
+            self.state = .changed
         }
-        self.state = .changed
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-        self.state = .ended
+        if alpha == 0 {
+            self.state = .failed
+        } else {
+            self.state = .ended
+        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -63,14 +86,20 @@ class RunGestureRecognizer: UIGestureRecognizer {
     }
     
     override func reset() {
+        self.angleR = 0.0
+        self.level = 0
         self.state = .possible
     }
     
     func isInitialTouch(location: CGPoint) -> Bool {
-        return distance(from: location, to: initialCenter) < epsilonDistance
+        return distance(from: location, to: chevronCenter) < epsilonDistance
     }
     
     func distance(from point1: CGPoint, to point2: CGPoint) -> CGFloat {
         return sqrt((point1.x-point2.x)*(point1.x-point2.x) + (point1.y-point2.y)*(point1.y-point2.y))
+    }
+    
+    func angle(of point: CGPoint) -> CGFloat {
+        return -atan2(-(point.x-center.x),-(point.y-center.y))
     }
 }

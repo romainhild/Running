@@ -16,10 +16,16 @@
 		AB1B63902093681A00D52B95 /* RunningUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1B638F2093681A00D52B95 /* RunningUITests.swift */; };
 		AB1B639E2093692000D52B95 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1B639D2093692000D52B95 /* TableViewController.swift */; };
 		AB1B63A12093732500D52B95 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1B63A02093732500D52B95 /* AVFoundation.framework */; };
-		AB1B63A920937DC000D52B95 /* bip.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A520937AD500D52B95 /* bip.m4a */; };
 		AB1B63AA20937DC000D52B95 /* bip2.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A820937AEC00D52B95 /* bip2.m4a */; };
 		AB1B63AB20937DC000D52B95 /* bip3.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A620937AEC00D52B95 /* bip3.m4a */; };
 		AB1B63AC20937DC000D52B95 /* bip4.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB1B63A720937AEC00D52B95 /* bip4.m4a */; };
+		AB9176AB209709BB0078400A /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176A5209709BA0078400A /* ChevronView.swift */; };
+		AB9176AC209709BB0078400A /* ChevronLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176A6209709BA0078400A /* ChevronLayer.swift */; };
+		AB9176AD209709BB0078400A /* ChevronView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB9176A7209709BA0078400A /* ChevronView.xib */; };
+		AB9176AE209709BB0078400A /* TargetView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB9176A8209709BA0078400A /* TargetView.xib */; };
+		AB9176AF209709BB0078400A /* TargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176A9209709BA0078400A /* TargetView.swift */; };
+		AB9176B0209709BB0078400A /* TargetLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176AA209709BB0078400A /* TargetLayer.swift */; };
+		AB9176B320970DB00078400A /* RunGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176B220970DB00078400A /* RunGestureRecognizer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,10 +61,17 @@
 		AB1B63912093681A00D52B95 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AB1B639D2093692000D52B95 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		AB1B63A02093732500D52B95 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		AB1B63A520937AD500D52B95 /* bip.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; name = bip.m4a; path = ../../../../Desktop/bip.m4a; sourceTree = "<group>"; };
 		AB1B63A620937AEC00D52B95 /* bip3.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip3.m4a; sourceTree = "<group>"; };
 		AB1B63A720937AEC00D52B95 /* bip4.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip4.m4a; sourceTree = "<group>"; };
 		AB1B63A820937AEC00D52B95 /* bip2.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip2.m4a; sourceTree = "<group>"; };
+		AB9176A5209709BA0078400A /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
+		AB9176A6209709BA0078400A /* ChevronLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronLayer.swift; sourceTree = "<group>"; };
+		AB9176A7209709BA0078400A /* ChevronView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChevronView.xib; sourceTree = "<group>"; };
+		AB9176A8209709BA0078400A /* TargetView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TargetView.xib; sourceTree = "<group>"; };
+		AB9176A9209709BA0078400A /* TargetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetView.swift; sourceTree = "<group>"; };
+		AB9176AA209709BB0078400A /* TargetLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetLayer.swift; sourceTree = "<group>"; };
+		AB9176B120970D6E0078400A /* bip.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip.m4a; sourceTree = "<group>"; };
+		AB9176B220970DB00078400A /* RunGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunGestureRecognizer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +124,13 @@
 		AB1B636E2093681A00D52B95 /* Running */ = {
 			isa = PBXGroup;
 			children = (
+				AB9176B220970DB00078400A /* RunGestureRecognizer.swift */,
+				AB9176A6209709BA0078400A /* ChevronLayer.swift */,
+				AB9176A5209709BA0078400A /* ChevronView.swift */,
+				AB9176A7209709BA0078400A /* ChevronView.xib */,
+				AB9176AA209709BB0078400A /* TargetLayer.swift */,
+				AB9176A9209709BA0078400A /* TargetView.swift */,
+				AB9176A8209709BA0078400A /* TargetView.xib */,
 				AB1B636F2093681A00D52B95 /* AppDelegate.swift */,
 				AB1B63712093681A00D52B95 /* ViewController.swift */,
 				AB1B639D2093692000D52B95 /* TableViewController.swift */,
@@ -152,7 +172,7 @@
 		AB1B63A420937AA300D52B95 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				AB1B63A520937AD500D52B95 /* bip.m4a */,
+				AB9176B120970D6E0078400A /* bip.m4a */,
 				AB1B63A820937AEC00D52B95 /* bip2.m4a */,
 				AB1B63A620937AEC00D52B95 /* bip3.m4a */,
 				AB1B63A720937AEC00D52B95 /* bip4.m4a */,
@@ -267,7 +287,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AB1B63A920937DC000D52B95 /* bip.m4a in Resources */,
+				AB9176AE209709BB0078400A /* TargetView.xib in Resources */,
+				AB9176AD209709BB0078400A /* ChevronView.xib in Resources */,
 				AB1B63AA20937DC000D52B95 /* bip2.m4a in Resources */,
 				AB1B63AB20937DC000D52B95 /* bip3.m4a in Resources */,
 				AB1B63AC20937DC000D52B95 /* bip4.m4a in Resources */,
@@ -298,9 +319,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB9176AB209709BB0078400A /* ChevronView.swift in Sources */,
+				AB9176B320970DB00078400A /* RunGestureRecognizer.swift in Sources */,
 				AB1B63722093681A00D52B95 /* ViewController.swift in Sources */,
 				AB1B639E2093692000D52B95 /* TableViewController.swift in Sources */,
+				AB9176B0209709BB0078400A /* TargetLayer.swift in Sources */,
 				AB1B63702093681A00D52B95 /* AppDelegate.swift in Sources */,
+				AB9176AC209709BB0078400A /* ChevronLayer.swift in Sources */,
+				AB9176AF209709BB0078400A /* TargetView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

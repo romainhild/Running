@@ -11,11 +11,9 @@ import AVFoundation
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var chevronView: ChevronView!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var timePickerView: UIPickerView!
-    @IBOutlet weak var speedPickerView: UIPickerView!
     @IBOutlet weak var totalLabel: UILabel!
-    @IBOutlet weak var copyButton: UIButton!
     
     let times: [String] = ["30s", "1m", "1m30", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m", "11m", "12m"]
     let timesD: [Int] = [30, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720]
@@ -35,10 +33,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         totalLabel.text = doubleToTime(time: totalTime)
-        copyButton.isEnabled = false
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
         tableView.allowsMultipleSelection = true
         tableView.contentOffset = CGPoint(x: 0, y: tableView.contentSize.height)
-    }
+ 
+        let recognizer = RunGestureRecognizer(target: self,
+                                              action:#selector(handleGesture(recognizer:)))
+        recognizer.delegate = self
+        chevronView.addGestureRecognizer(recognizer)
+   }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -46,23 +49,23 @@ class ViewController: UIViewController {
     }
 
     @IBAction func addTime(_ sender: Any) {
-        let timeRow = timePickerView.selectedRow(inComponent: 0)
-        let speedRow = speedPickerView.selectedRow(inComponent: 0)
-        selectedTimes.append((times[timeRow], timesD[timeRow],speeds[speedRow],speedsC[speedRow]))
-        let index = IndexPath(row: selectedTimes.count-1, section: 0)
-        tableView.beginUpdates()
-        tableView.insertRows(at: [index], with: .automatic)
-        tableView.endUpdates()
-        if tableView.frame.height < tableView.contentSize.height + 44 {
-            tableView.scrollToRow(at: index, at: .bottom, animated: true)
-        }
-        totalLabel.text = doubleToTime(time: totalTime)
+//        let timeRow = timePickerView.selectedRow(inComponent: 0)
+//        let speedRow = speedPickerView.selectedRow(inComponent: 0)
+//        selectedTimes.append((times[timeRow], timesD[timeRow],speeds[speedRow],speedsC[speedRow]))
+//        let index = IndexPath(row: selectedTimes.count-1, section: 0)
+//        tableView.beginUpdates()
+//        tableView.insertRows(at: [index], with: .automatic)
+//        tableView.endUpdates()
+//        if tableView.frame.height < tableView.contentSize.height + 44 {
+//            tableView.scrollToRow(at: index, at: .bottom, animated: true)
+//        }
+//        totalLabel.text = doubleToTime(time: totalTime)
     }
     
     @IBAction func editTableView(_ sender: Any) {
         tableView.setEditing(!isEditingTableView, animated: true)
         isEditingTableView = !isEditingTableView
-        copyButton.isEnabled = false
+        self.navigationItem.leftBarButtonItem?.isEnabled = false
     }
     
     @IBAction func copyRows(_ sender: Any) {
@@ -108,41 +111,14 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController : UIPickerViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableViewAutomaticDimension
-    }
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView == timePickerView {
-            return times[row]
-        } else {
-            return speeds[row]
-        }
-    }
-}
-
-extension ViewController : UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerView == timePickerView {
-            return times.count
-        } else {
-            return speeds.count
-        }
-    }
-}
-
 extension ViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        copyButton.isEnabled = true
+        self.navigationItem.leftBarButtonItem?.isEnabled = true
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let _ = tableView.indexPathsForSelectedRows else {
-            copyButton.isEnabled = false
+            self.navigationItem.leftBarButtonItem?.isEnabled = false
             return
         }
     }
@@ -173,4 +149,18 @@ extension ViewController : UITableViewDataSource {
         let timeToMove = selectedTimes.remove(at: sourceIndexPath.row)
         selectedTimes.insert(timeToMove, at: destinationIndexPath.row)
     }
+}
+
+extension ViewController : UIGestureRecognizerDelegate {
+    @IBAction func handleGesture(recognizer: RunGestureRecognizer) {
+        if recognizer.state == .changed {
+            var transform = CATransform3DIdentity;
+            transform = CATransform3DRotate(transform, recognizer.angle, 0.0, 0.0, 1.0);
+            transform = CATransform3DTranslate(transform, 0, recognizer.view!.layer.bounds.height/10.0*CGFloat(recognizer.level), 0)
+            chevronView.layer.sublayerTransform = transform
+        } else {
+            chevronView.layer.sublayerTransform = CATransform3DIdentity
+        }
+    }
+
 }

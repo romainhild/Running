@@ -56,7 +56,6 @@ class RunGestureRecognizer: UIGestureRecognizer {
         let oldAlpha = self.alpha
         self.angleR = angle(of: newPoint)-initialAngle
         if (oldAlpha != self.alpha) && ((oldAlpha > self.alpha+2) || (oldAlpha < self.alpha-2)) {
-            print("invalid alpha: \(self.alpha) old: \(oldAlpha)")
             state = .failed
         } else {
             let r = distance(from: newPoint, to: center)

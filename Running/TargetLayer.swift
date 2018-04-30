@@ -9,7 +9,7 @@
 import UIKit
 
 class RadiusLayer: CALayer {
-    var size: CGFloat { return bounds.height/15 }
+    var size: CGFloat { return bounds.height/12 }
 }
 
 class TargetLayer: RadiusLayer {

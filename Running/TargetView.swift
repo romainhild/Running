@@ -12,6 +12,7 @@ import UIKit
 class TargetView: UIView {
     var view: UIView!
     var targetLayer = TargetLayer()
+    var pointLayers: [PointLayer] = []
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -27,6 +28,16 @@ class TargetView: UIView {
     
     func commonInit() {
         self.layer.addSublayer(targetLayer)
+        for l in stride(from: 1, to: 8, by: 2) {
+            for i in 0..<24 {
+                let pl = PointLayer()
+                pl.level = CGFloat(l)
+                pl.angle = CGFloat(i)
+                pl.opacity = 0.0
+                self.layer.addSublayer(pl)
+                self.pointLayers.append(pl)
+            }
+        }
     }
     
     func loadViewFromNib() {
@@ -44,8 +55,11 @@ class TargetView: UIView {
     
     override open func layoutSubviews() {
         super.layoutSubviews()
+        
         targetLayer.frame = self.bounds
         targetLayer.setNeedsDisplay()
+        pointLayers.forEach { $0.frame = self.bounds; $0.setNeedsDisplay() }
+        
         let label12 = UILabel(frame: CGRect(x: view.bounds.width/2-9, y: targetLayer.size*CGFloat(Speed.allValues.count),
                                             width: 18, height: 15))
         label12.text = "12"

@@ -178,11 +178,16 @@ extension ViewController : UITableViewDataSource {
 
 extension ViewController : UIGestureRecognizerDelegate {
     @IBAction func handleGesture(recognizer: RunGestureRecognizer) {
+        targetView.pointLayers.forEach { $0.opacity = 0.0 }
         if recognizer.state == .changed {
             var transform = CATransform3DIdentity;
             transform = CATransform3DRotate(transform, recognizer.angle, 0.0, 0.0, 1.0);
             transform = CATransform3DTranslate(transform, 0, targetView.targetLayer.size*CGFloat(recognizer.level), 0)
             chevronView.layer.sublayerTransform = transform
+            targetView.pointLayers.forEach { $0.opacity = 0.0 }
+            for i in 0..<recognizer.alpha {
+                targetView.pointLayers[recognizer.level*24+i].opacity = 1.0
+            }
         } else if recognizer.state == .ended {
             guard let speed = Speed(rawValue: recognizer.level) else {
                 chevronView.layer.sublayerTransform = CATransform3DIdentity

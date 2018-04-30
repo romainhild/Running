@@ -27,6 +27,7 @@
 		AB9176B0209709BB0078400A /* TargetLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176AA209709BB0078400A /* TargetLayer.swift */; };
 		AB9176B320970DB00078400A /* RunGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176B220970DB00078400A /* RunGestureRecognizer.swift */; };
 		AB9176B4209736830078400A /* bip.m4a in Resources */ = {isa = PBXBuildFile; fileRef = AB9176B120970D6E0078400A /* bip.m4a */; };
+		AB9176B62097486D0078400A /* runningman.png in Resources */ = {isa = PBXBuildFile; fileRef = AB9176B52097486D0078400A /* runningman.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		AB9176AA209709BB0078400A /* TargetLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TargetLayer.swift; sourceTree = "<group>"; };
 		AB9176B120970D6E0078400A /* bip.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bip.m4a; sourceTree = "<group>"; };
 		AB9176B220970DB00078400A /* RunGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RunGestureRecognizer.swift; sourceTree = "<group>"; };
+		AB9176B52097486D0078400A /* runningman.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = runningman.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				AB1B63762093681A00D52B95 /* Assets.xcassets */,
 				AB1B63782093681A00D52B95 /* LaunchScreen.storyboard */,
 				AB1B637B2093681A00D52B95 /* Info.plist */,
+				AB9176B52097486D0078400A /* runningman.png */,
 				AB1B63A420937AA300D52B95 /* Sounds */,
 			);
 			path = Running;
@@ -292,6 +295,7 @@
 				AB9176AD209709BB0078400A /* ChevronView.xib in Resources */,
 				AB9176B4209736830078400A /* bip.m4a in Resources */,
 				AB1B63AA20937DC000D52B95 /* bip2.m4a in Resources */,
+				AB9176B62097486D0078400A /* runningman.png in Resources */,
 				AB1B63AB20937DC000D52B95 /* bip3.m4a in Resources */,
 				AB1B63AC20937DC000D52B95 /* bip4.m4a in Resources */,
 				AB1B637A2093681A00D52B95 /* LaunchScreen.storyboard in Resources */,

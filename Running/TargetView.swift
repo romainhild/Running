@@ -46,6 +46,22 @@ class TargetView: UIView {
         super.layoutSubviews()
         targetLayer.frame = self.bounds
         targetLayer.setNeedsDisplay()
+        let label12 = UILabel(frame: CGRect(x: view.bounds.width/2-9, y: targetLayer.size*CGFloat(Speed.allValues.count),
+                                            width: 18, height: 15))
+        label12.text = "12"
+        self.addSubview(label12)
+        let label3 = UILabel(frame: CGRect(x: view.bounds.width-targetLayer.size*CGFloat(Speed.allValues.count)-10, y:view.bounds.height/2-7.5,
+                                           width: 10, height: 15))
+        label3.text = "3"
+        self.addSubview(label3)
+        let label6 = UILabel(frame: CGRect(x: view.bounds.width/2-5, y: view.bounds.height-targetLayer.size*CGFloat(Speed.allValues.count)-15,
+                                           width: 10, height: 15))
+        label6.text = "6"
+        self.addSubview(label6)
+        let label9 = UILabel(frame: CGRect(x: targetLayer.size*CGFloat(Speed.allValues.count), y: view.bounds.height/2-7.5,
+                                           width: 10, height: 15))
+        label9.text = "9"
+        self.addSubview(label9)
     }
 
 }

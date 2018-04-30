@@ -8,18 +8,14 @@
 
 import UIKit
 
-class ChevronLayer: CALayer {
-    var chevronWidth: CGFloat { return bounds.width/5 }
-    var chevronHeight: CGFloat { return bounds.height/10 }
-    var chevronCenter: CGPoint { return CGPoint(x: bounds.width/2, y: chevronHeight/2) }
+class ChevronLayer: RadiusLayer {
+    var chevronCenter: CGPoint { return CGPoint(x: bounds.width/2, y: size/2) }
+    
+    let image = UIImage(named: "runningman.png")!
 
     override func draw(in ctx: CGContext) {
-        let points = [CGPoint(x: chevronCenter.x-chevronWidth/2, y: chevronHeight),
-                      CGPoint(x: chevronCenter.x, y: 0),
-                      CGPoint(x: chevronCenter.x+chevronWidth/2, y: chevronHeight)]
-        ctx.setStrokeColor(UIColor.black.cgColor)
-        ctx.setLineWidth(2.0)
-        ctx.addLines(between: points)
-        ctx.drawPath(using: .stroke)
+         UIGraphicsPushContext(ctx)
+        image.draw(in: CGRect(x: chevronCenter.x-size/2, y: chevronCenter.y-size/2, width: size, height: size))
+        UIGraphicsPopContext()
     }
 }

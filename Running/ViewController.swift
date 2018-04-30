@@ -47,15 +47,16 @@ enum Speed: Int {
     func radius() -> CGFloat {
         switch self {
         case .walk: return 5.0/10.0
-        case .slow: return 4.0/10.0
-        case .easy: return 3.0/10.0
-        case .hard: return 2.0/10.0
+        case .slow: return 4.5/10.0
+        case .easy: return 4.0/10.0
+        case .hard: return 3.5/10.0
         }
     }
 }
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var targetView: TargetView!
     @IBOutlet weak var chevronView: ChevronView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var totalLabel: UILabel!
@@ -180,7 +181,7 @@ extension ViewController : UIGestureRecognizerDelegate {
         if recognizer.state == .changed {
             var transform = CATransform3DIdentity;
             transform = CATransform3DRotate(transform, recognizer.angle, 0.0, 0.0, 1.0);
-            transform = CATransform3DTranslate(transform, 0, recognizer.view!.layer.bounds.height/10.0*CGFloat(recognizer.level), 0)
+            transform = CATransform3DTranslate(transform, 0, targetView.targetLayer.size*CGFloat(recognizer.level), 0)
             chevronView.layer.sublayerTransform = transform
         } else if recognizer.state == .ended {
             guard let speed = Speed(rawValue: recognizer.level) else {

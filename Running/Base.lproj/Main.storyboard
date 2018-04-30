@@ -76,7 +76,7 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Cu-VW-Amj" customClass="ChevronView" customModule="Running" customModuleProvider="target">
                                 <rect key="frame" x="16" y="72" width="343" height="343"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7Cu-VW-Amj" secondAttribute="height" multiplier="1:1" id="EbD-Au-ph6"/>
@@ -116,6 +116,7 @@
                     <connections>
                         <outlet property="chevronView" destination="7Cu-VW-Amj" id="apB-na-LrW"/>
                         <outlet property="tableView" destination="NgV-qW-Jeh" id="jXR-0U-Pkg"/>
+                        <outlet property="targetView" destination="1wO-Zz-6qc" id="LiS-QB-PKa"/>
                         <outlet property="totalLabel" destination="BFD-yd-iUn" id="oL2-AT-c2u"/>
                     </connections>
                 </viewController>

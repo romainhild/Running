@@ -9,11 +9,49 @@
 import UIKit
 import AVFoundation
 
-enum Speed: String {
-    case walk = "Walk"
-    case slow = "Slow"
-    case easy = "Easy"
-    case hard = "Hard"
+enum Speed: Int {
+    case walk = 0
+    case slow
+    case easy
+    case hard
+    
+    static let allValues = [walk, slow, easy, hard]
+
+    func string() -> String {
+        switch self {
+        case .walk: return "Walk"
+        case .slow: return "Slow"
+        case .easy: return "Easy"
+        case .hard: return "Hard"
+        }
+    }
+    
+    func color() -> UIColor {
+        switch self {
+        case .walk: return UIColor.yellow
+        case .slow: return UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1)
+        case .easy: return UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1)
+        case .hard: return UIColor.red
+        }
+    }
+    
+    func sound() -> String {
+        switch self {
+        case .walk: return "bip"
+        case .slow: return "bip2"
+        case .easy: return "bip3"
+        case .hard: return "bip4"
+        }
+    }
+    
+    func radius() -> CGFloat {
+        switch self {
+        case .walk: return 5.0/10.0
+        case .slow: return 4.0/10.0
+        case .easy: return 3.0/10.0
+        case .hard: return 2.0/10.0
+        }
+    }
 }
 
 class ViewController: UIViewController {
@@ -22,13 +60,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var totalLabel: UILabel!
     
-//    let times: [String] = ["30s", "1m", "1m30", "2m", "3m", "4m", "5m", "6m", "7m", "8m", "9m", "10m", "11m", "12m"]
-//    let timesD: [Int] = [30, 60, 90, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720]
-//    let speeds: [Int] = [0,1,2,3]
-//    let speedsString: [String] = ["Walk", "Slow", "Easy", "Hard"]
-//    let speedsC: [UIColor] = [UIColor.yellow, UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1),
-//                              UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1), UIColor.red]
-//    var selectedTimes: [(String,Int,String,UIColor)] = []
     var selectedTimesAndSpeeds: [(Int,Speed)] = []
     
     var isEditingTableView: Bool = false
@@ -40,7 +71,7 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
         totalLabel.text = intToTime(time: totalTime)
         self.navigationItem.leftBarButtonItem?.isEnabled = false
         tableView.allowsMultipleSelection = true
@@ -57,20 +88,6 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    @IBAction func addTime(_ sender: Any) {
-//        let timeRow = timePickerView.selectedRow(inComponent: 0)
-//        let speedRow = speedPickerView.selectedRow(inComponent: 0)
-//        selectedTimes.append((times[timeRow], timesD[timeRow],speeds[speedRow],speedsC[speedRow]))
-//        let index = IndexPath(row: selectedTimes.count-1, section: 0)
-//        tableView.beginUpdates()
-//        tableView.insertRows(at: [index], with: .automatic)
-//        tableView.endUpdates()
-//        if tableView.frame.height < tableView.contentSize.height + 44 {
-//            tableView.scrollToRow(at: index, at: .bottom, animated: true)
-//        }
-//        totalLabel.text = intToTime(time: totalTime)
-    }
-    
     @IBAction func editTableView(_ sender: Any) {
         tableView.setEditing(!isEditingTableView, animated: true)
         isEditingTableView = !isEditingTableView
@@ -95,8 +112,6 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "runningSegue" {
-//            let navbar = segue.destination as? UINavigationController
-//            let runningController = navbar?.topViewController as? TableViewController
             let runningController = segue.destination as? TableViewController
             runningController?.timesSpeeds = selectedTimesAndSpeeds
         }
@@ -141,7 +156,7 @@ extension ViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath)
         let timeSpeed = selectedTimesAndSpeeds[indexPath.row]
-        cell.textLabel?.text = "\(intToTime(time: timeSpeed.0)) \(timeSpeed.1.rawValue)"
+        cell.textLabel?.text = "\(intToTime(time: timeSpeed.0)) \(timeSpeed.1.string())"
         cell.showsReorderControl = isEditingTableView
         return cell
     }
@@ -168,20 +183,13 @@ extension ViewController : UIGestureRecognizerDelegate {
             transform = CATransform3DTranslate(transform, 0, recognizer.view!.layer.bounds.height/10.0*CGFloat(recognizer.level), 0)
             chevronView.layer.sublayerTransform = transform
         } else if recognizer.state == .ended {
-            let speed: Speed
-            switch recognizer.level {
-            case 0:
-                speed = .walk
-            case 1:
-                speed = .slow
-            case 2:
-                speed = .easy
-            default:
-                speed = .hard
+            guard let speed = Speed(rawValue: recognizer.level) else {
+                chevronView.layer.sublayerTransform = CATransform3DIdentity
+                return
             }
-            let time = recognizer.alpha
-            print("\(intToTime(time: time*30)) \(speed.rawValue)")
-            selectedTimesAndSpeeds.append((time*30,speed))
+
+            let time = recognizer.alpha*30
+            selectedTimesAndSpeeds.append((time,speed))
             let index = IndexPath(row: selectedTimesAndSpeeds.count-1, section: 0)
             tableView.beginUpdates()
             tableView.insertRows(at: [index], with: .automatic)

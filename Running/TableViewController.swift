@@ -10,12 +10,7 @@ import UIKit
 import AVFoundation
 
 class TableViewController: UITableViewController {
-    let soundList: [Speed: String] = [.walk: "bip", .slow: "bip2", .easy: "bip3", .hard: "bip4"]
     var soundsId: [Speed: SystemSoundID] = [:]
-    let colorList: [Speed: UIColor] = [ .walk: UIColor.yellow,
-                                        .slow: UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1),
-                                        .easy: UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1),
-                                        .hard: UIColor.red]
     var timesSpeeds: [(Int,Speed)] = []
     
     var timer = Timer()
@@ -27,14 +22,9 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "runningCell")
-        for (speed,sound) in soundList {
-            let path = Bundle.main.path(forResource: "\(sound)", ofType:"m4a")!
+        for speed in Speed.allValues {
+            let path = Bundle.main.path(forResource: "\(speed.sound())", ofType:"m4a")!
             let url = URL(fileURLWithPath: path)
             var soundId: SystemSoundID = 0
             AudioServicesCreateSystemSoundID(url as CFURL, &soundId)
@@ -148,8 +138,8 @@ class TableViewController: UITableViewController {
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 80)
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             if timesSpeeds.count > 0 {
-                cell.textLabel?.backgroundColor = colorList[timesSpeeds[0].1]
-                cell.contentView.backgroundColor = colorList[timesSpeeds[0].1]
+                cell.textLabel?.backgroundColor = timesSpeeds[0].1.color()
+                cell.contentView.backgroundColor = timesSpeeds[0].1.color()
             } else {
                 cell.contentView.backgroundColor = UIColor.white
                 cell.textLabel?.backgroundColor = UIColor.white
@@ -158,8 +148,8 @@ class TableViewController: UITableViewController {
         } else {
             let timeSpeed = timesSpeeds[indexPath.row-2]
             cell.textLabel?.text = intToTime(time: timeSpeed.0)
-            cell.contentView.backgroundColor = colorList[timeSpeed.1]
-            cell.textLabel?.backgroundColor = colorList[timeSpeed.1]
+            cell.contentView.backgroundColor = timeSpeed.1.color()
+            cell.textLabel?.backgroundColor = timeSpeed.1.color()
         }
         return cell
     }
@@ -171,55 +161,4 @@ class TableViewController: UITableViewController {
             return UITableViewAutomaticDimension
         }
     }
-
-    /*
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
-     */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

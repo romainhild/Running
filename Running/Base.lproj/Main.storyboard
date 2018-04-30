@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NgV-qW-Jeh">
-                                <rect key="frame" x="16" y="415" width="343" height="191"/>
+                                <rect key="frame" x="16" y="423" width="343" height="183"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="mycell" textLabel="Irb-cS-b0C" rowHeight="67" style="IBUITableViewCellStyleDefault" id="nmT-lZ-yhg">
@@ -68,14 +68,14 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1wO-Zz-6qc" customClass="TargetView" customModule="Running" customModuleProvider="target">
-                                <rect key="frame" x="16" y="64" width="343" height="343"/>
+                                <rect key="frame" x="16" y="72" width="343" height="343"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="1wO-Zz-6qc" secondAttribute="height" multiplier="1:1" id="Yjk-JV-Bxb"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Cu-VW-Amj" customClass="ChevronView" customModule="Running" customModuleProvider="target">
-                                <rect key="frame" x="16" y="64" width="343" height="343"/>
+                                <rect key="frame" x="16" y="72" width="343" height="343"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -85,8 +85,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="7Cu-VW-Amj" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" id="0zY-2q-v7T"/>
-                            <constraint firstItem="1wO-Zz-6qc" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" id="6JL-Ex-GzY"/>
+                            <constraint firstItem="7Cu-VW-Amj" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" constant="8" id="0zY-2q-v7T"/>
+                            <constraint firstItem="1wO-Zz-6qc" firstAttribute="top" secondItem="N3L-3h-EQL" secondAttribute="top" constant="8" id="6JL-Ex-GzY"/>
                             <constraint firstItem="NgV-qW-Jeh" firstAttribute="leading" secondItem="N3L-3h-EQL" secondAttribute="leading" constant="16" id="9iL-mG-Ymm"/>
                             <constraint firstItem="N3L-3h-EQL" firstAttribute="trailing" secondItem="nfd-p9-AjP" secondAttribute="trailing" constant="16" id="EX4-h1-Sb3"/>
                             <constraint firstItem="nfd-p9-AjP" firstAttribute="top" secondItem="NgV-qW-Jeh" secondAttribute="bottom" constant="8" id="ORW-pN-Kmq"/>

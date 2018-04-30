@@ -60,11 +60,11 @@ class RunGestureRecognizer: UIGestureRecognizer {
             state = .failed
         } else {
             let r = distance(from: newPoint, to: center)
-            if r < height*2.0/10.0 {
+            if r < height*Speed.hard.radius() {
                 self.level = 3
-            } else if r < height*3.0/10.0 {
+            } else if r < height*Speed.easy.radius() {
                 self.level = 2
-            } else if r < height*4.0/10.0 {
+            } else if r < height*Speed.slow.radius() {
                 self.level = 1
             } else {
                 self.level = 0

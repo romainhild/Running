@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+//@IBDesignable
 class TargetView: UIView {
     var view: UIView!
     var targetLayer = TargetLayer()

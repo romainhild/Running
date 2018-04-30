@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -14,7 +15,6 @@
         <!--Program-->
         <scene sceneID="o4w-sJ-jh5">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rv5-ZB-jBh" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="o1u-zP-SKI" customClass="ViewController" customModule="Running" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="d92-M2-Unp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
@@ -54,15 +54,23 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="nfd-p9-AjP">
                                 <rect key="frame" x="16" y="614" width="343" height="33"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFD-yd-iUn">
-                                        <rect key="frame" x="0.0" y="0.0" width="171.5" height="33"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BFD-yd-iUn">
+                                        <rect key="frame" x="0.0" y="0.0" width="114.5" height="33"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oMK-gL-Aks">
+                                        <rect key="frame" x="114.5" y="0.0" width="114" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <state key="normal" title="Save"/>
+                                        <connections>
+                                            <action selector="saveProgram:" destination="o1u-zP-SKI" eventType="touchUpInside" id="iwo-qW-lIP"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k9Y-Lf-qsN">
-                                        <rect key="frame" x="171.5" y="0.0" width="171.5" height="33"/>
+                                        <rect key="frame" x="228.5" y="0.0" width="114.5" height="33"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Run"/>
                                         <connections>
@@ -106,24 +114,40 @@
                         <viewLayoutGuide key="safeArea" id="N3L-3h-EQL"/>
                     </view>
                     <navigationItem key="navigationItem" title="Program" id="OTj-tD-NNg">
-                        <barButtonItem key="leftBarButtonItem" title="Copy" id="Id8-Xv-Jkg">
-                            <connections>
-                                <action selector="copyRows:" destination="o1u-zP-SKI" id="9JK-so-JBt"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="ixg-2i-PrC">
-                            <connections>
-                                <action selector="editTableView:" destination="o1u-zP-SKI" id="Tyx-xA-Ufj"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem systemItem="bookmarks" id="2VC-iZ-itO">
+                                <connections>
+                                    <segue destination="0ZM-fX-hnM" kind="presentation" identifier="programsSegue" id="cHT-og-wEq"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem systemItem="add" id="6dp-Wm-JrU">
+                                <connections>
+                                    <action selector="addProgram" destination="o1u-zP-SKI" id="nu2-JA-Qlf"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="edit" id="ixg-2i-PrC">
+                                <connections>
+                                    <action selector="editTableView:" destination="o1u-zP-SKI" id="Tyx-xA-Ufj"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Copy" id="Id8-Xv-Jkg">
+                                <connections>
+                                    <action selector="copyRows:" destination="o1u-zP-SKI" id="9JK-so-JBt"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="chevronView" destination="7Cu-VW-Amj" id="apB-na-LrW"/>
+                        <outlet property="saveButton" destination="oMK-gL-Aks" id="Eco-ZO-91m"/>
                         <outlet property="tableView" destination="NgV-qW-Jeh" id="jXR-0U-Pkg"/>
                         <outlet property="targetView" destination="1wO-Zz-6qc" id="LiS-QB-PKa"/>
                         <outlet property="totalLabel" destination="BFD-yd-iUn" id="oL2-AT-c2u"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rv5-ZB-jBh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2432.8000000000002" y="196.55172413793105"/>
         </scene>
@@ -164,7 +188,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n8i-fS-1eE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3279" y="197"/>
+            <point key="canvasLocation" x="2989" y="197"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pwP-8E-n37">
@@ -182,7 +206,79 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="re5-Ff-LUt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1493.5999999999999" y="196.55172413793105"/>
+            <point key="canvasLocation" x="1811" y="197"/>
+        </scene>
+        <!--Programs-->
+        <scene sceneID="hx6-mq-ZtN">
+            <objects>
+                <tableViewController id="SZP-nQ-YJa" customClass="ProgramsViewController" customModule="Running" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" indicatorStyle="white" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="E68-Ut-GbH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="programCell" textLabel="qA1-Ib-H82" detailTextLabel="tph-dO-8Px" style="IBUITableViewCellStyleSubtitle" id="iSP-BT-JNg">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="iSP-BT-JNg" id="An0-2y-zcr">
+                                    <rect key="frame" x="0.0" y="0.0" width="341" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qA1-Ib-H82">
+                                            <rect key="frame" x="16" y="5" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tph-dO-8Px">
+                                            <rect key="frame" x="16" y="25.5" width="44" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="SZP-nQ-YJa" id="atK-Un-9BF"/>
+                            <outlet property="delegate" destination="SZP-nQ-YJa" id="QVl-4N-7bF"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Programs" id="B60-Oc-jcy">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="ReR-Tp-9Oc">
+                            <connections>
+                                <action selector="done:" destination="SZP-nQ-YJa" id="DET-CF-q8s"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="I1b-4B-2qV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2989" y="1019"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5Q0-wm-V5q">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0ZM-fX-hnM" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="sGU-va-kbN">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="SZP-nQ-YJa" kind="relationship" relationship="rootViewController" id="ntI-qF-jiC"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gNO-ro-eVo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2433" y="1019"/>
         </scene>
     </scenes>
 </document>

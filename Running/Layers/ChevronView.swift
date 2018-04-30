@@ -8,7 +8,7 @@
 
 import UIKit
 
-@IBDesignable
+//@IBDesignable
 class ChevronView: UIView {
     var view: UIView!
     let chevronLayer = ChevronLayer()

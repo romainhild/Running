@@ -9,72 +9,30 @@
 import UIKit
 import AVFoundation
 
-enum Speed: Int {
-    case walk = 0
-    case slow
-    case easy
-    case hard
-    
-    static let allValues = [walk, slow, easy, hard]
-
-    func string() -> String {
-        switch self {
-        case .walk: return "Walk"
-        case .slow: return "Slow"
-        case .easy: return "Easy"
-        case .hard: return "Hard"
-        }
-    }
-    
-    func color() -> UIColor {
-        switch self {
-        case .walk: return UIColor.yellow
-        case .slow: return UIColor.init(red: 1.0, green: 0.66, blue: 0, alpha: 1)
-        case .easy: return UIColor.init(red: 1.0, green: 0.33, blue: 0, alpha: 1)
-        case .hard: return UIColor.red
-        }
-    }
-    
-    func sound() -> String {
-        switch self {
-        case .walk: return "bip"
-        case .slow: return "bip2"
-        case .easy: return "bip3"
-        case .hard: return "bip4"
-        }
-    }
-    
-    func radius() -> CGFloat {
-        switch self {
-        case .walk: return 5.0/10.0
-        case .slow: return 4.5/10.0
-        case .easy: return 4.0/10.0
-        case .hard: return 3.5/10.0
-        }
-    }
-}
-
 class ViewController: UIViewController {
 
     @IBOutlet weak var targetView: TargetView!
     @IBOutlet weak var chevronView: ChevronView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var totalLabel: UILabel!
+    @IBOutlet weak var saveButton: UIButton!
     
-    var selectedTimesAndSpeeds: [(Int,Speed)] = []
-    
-    var isEditingTableView: Bool = false
-    var totalTime: Int {
-        get {
-            return selectedTimesAndSpeeds.reduce(0) { $0 + $1.0}
+    var indexProgram: Int? = nil {
+        didSet {
+            self.loadProgram()
         }
     }
+    var program: Program = Program()
+
+    var isEditingTableView: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        totalLabel.text = intToTime(time: totalTime)
-        self.navigationItem.leftBarButtonItem?.isEnabled = false
+ 
+        self.loadProgram()
+ 
+        totalLabel.text = intToTime(time: program.totalTime)
+        self.navigationItem.rightBarButtonItems![1].isEnabled = false
         tableView.allowsMultipleSelection = true
         tableView.contentOffset = CGPoint(x: 0, y: tableView.contentSize.height)
  
@@ -88,19 +46,30 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func loadProgram() {
+        if let index = self.indexProgram {
+            program = ProgramsSaved.shared.programs[index]
+            self.navigationItem.title = program.name
+        } else {
+            program = Program()
+            self.navigationItem.title = "Program"
+        }
+        tableView.reloadData()
+    }
 
     @IBAction func editTableView(_ sender: Any) {
         tableView.setEditing(!isEditingTableView, animated: true)
         isEditingTableView = !isEditingTableView
-        self.navigationItem.leftBarButtonItem?.isEnabled = false
+        self.navigationItem.rightBarButtonItems![1].isEnabled = false
     }
     
     @IBAction func copyRows(_ sender: Any) {
         let rows = tableView.indexPathsForSelectedRows!.map { $0.row }
         var indexes: [IndexPath] = []
         for row in rows {
-            indexes.append(IndexPath(row: selectedTimesAndSpeeds.count, section: 0))
-            selectedTimesAndSpeeds.append(selectedTimesAndSpeeds[row])
+            indexes.append(IndexPath(row: program.count, section: 0))
+            program.append(program[row])
         }
         tableView.beginUpdates()
         tableView.insertRows(at: indexes, with: .automatic)
@@ -108,13 +77,52 @@ class ViewController: UIViewController {
         if tableView.frame.height < tableView.contentSize.height + CGFloat(44*indexes.count) {
             tableView.scrollToRow(at: indexes.last!, at: .bottom, animated: true)
         }
-        totalLabel.text = intToTime(time: totalTime)
+        totalLabel.text = intToTime(time: program.totalTime)
+    }
+    
+    @IBAction func saveProgram(_ sender: Any) {
+        let alertController: UIAlertController
+        if let index = self.indexProgram {
+            alertController = UIAlertController(title: "Modify \(self.program.name)", message: "", preferredStyle: .alert)
+            alertController.addTextField { $0.text = self.program.name }
+            let saveAction = UIAlertAction(title: "Save", style: .default) { alert -> Void in
+                let name = alertController.textFields![0].text!
+                self.program.name = name
+                let programsSaved = ProgramsSaved.shared
+                programsSaved.replaceProgram(at: index, with: self.program)
+                self.indexProgram = index
+            }
+            alertController.addAction(saveAction)
+        } else {
+            alertController = UIAlertController(title: "Save Program", message: "", preferredStyle: .alert)
+            alertController.addTextField { $0.placeholder = "Enter a name:" }
+            let saveAction = UIAlertAction(title: "Save", style: .default) { alert -> Void in
+                let name = alertController.textFields![0].text!
+                self.program.name = name
+                let programsSaved = ProgramsSaved.shared
+                programsSaved.addProgram(self.program)
+                self.indexProgram = programsSaved.programs.count-1
+            }
+            alertController.addAction(saveAction)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    @IBAction func addProgram() {
+        self.indexProgram = nil
+        self.loadProgram()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "runningSegue" {
             let runningController = segue.destination as? TableViewController
-            runningController?.timesSpeeds = selectedTimesAndSpeeds
+            runningController?.program = program
+        } else if segue.identifier == "programsSegue" {
+            let navController = segue.destination as? UINavigationController
+            let programsController = navController?.topViewController as? ProgramsViewController
+            programsController?.delegate = self
         }
     }
     
@@ -138,12 +146,12 @@ class ViewController: UIViewController {
 
 extension ViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.navigationItem.leftBarButtonItem?.isEnabled = true
+        self.navigationItem.rightBarButtonItems![1].isEnabled = true
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let _ = tableView.indexPathsForSelectedRows else {
-            self.navigationItem.leftBarButtonItem?.isEnabled = false
+            self.navigationItem.rightBarButtonItems![1].isEnabled = false
             return
         }
     }
@@ -151,12 +159,12 @@ extension ViewController : UITableViewDelegate {
 
 extension ViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return selectedTimesAndSpeeds.count
+        return program.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "mycell", for: indexPath)
-        let timeSpeed = selectedTimesAndSpeeds[indexPath.row]
+        let timeSpeed = program[indexPath.row]
         cell.textLabel?.text = "\(intToTime(time: timeSpeed.0)) \(timeSpeed.1.string())"
         cell.showsReorderControl = isEditingTableView
         return cell
@@ -164,15 +172,15 @@ extension ViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            self.selectedTimesAndSpeeds.remove(at: indexPath.row)
+            self.program.remove(at: indexPath.row)
             self.tableView.deleteRows(at: [indexPath], with: .automatic)
-            totalLabel.text = intToTime(time: totalTime)
+            totalLabel.text = intToTime(time: program.totalTime)
         }
     }
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let timeToMove = selectedTimesAndSpeeds.remove(at: sourceIndexPath.row)
-        selectedTimesAndSpeeds.insert(timeToMove, at: destinationIndexPath.row)
+        let timeToMove = program.remove(at: sourceIndexPath.row)
+        program.insert(timeToMove, at: destinationIndexPath.row)
     }
 }
 
@@ -195,19 +203,25 @@ extension ViewController : UIGestureRecognizerDelegate {
             }
 
             let time = recognizer.alpha*30
-            selectedTimesAndSpeeds.append((time,speed))
-            let index = IndexPath(row: selectedTimesAndSpeeds.count-1, section: 0)
+            program.append((time,speed))
+            let index = IndexPath(row: program.count-1, section: 0)
             tableView.beginUpdates()
             tableView.insertRows(at: [index], with: .automatic)
             tableView.endUpdates()
             if tableView.frame.height < tableView.contentSize.height + 44 {
                 tableView.scrollToRow(at: index, at: .bottom, animated: true)
             }
-            totalLabel.text = intToTime(time: totalTime)
+            totalLabel.text = intToTime(time: program.totalTime)
             chevronView.layer.sublayerTransform = CATransform3DIdentity
         } else {
             chevronView.layer.sublayerTransform = CATransform3DIdentity
         }
     }
 
+}
+
+extension ViewController : ProgramsProtocol {
+    func selectedProgram(at index: Int) {
+        self.indexProgram = index
+    }
 }

@@ -8,11 +8,30 @@
 
 import Foundation
 
-final class ProgramsSaved {
+final class ProgramsSaved : Codable {
     private(set) var programs: [Program] = []
     static let shared = ProgramsSaved()
     
-    private init() {}
+    private init() {
+        if let data = try? Data(contentsOf: dataFilePath()) {
+            let decoder = PropertyListDecoder()
+            do {
+                programs = try decoder.decode([Program].self, from: data)
+            } catch {
+                print("Error decoding item array!")
+            }
+        }
+    }
+    
+    func savePrograms() {
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(programs)
+            try data.write(to: dataFilePath(), options: .atomic)
+        } catch {
+            print("Error encoding")
+        }
+    }
     
     func addProgram(_ program: Program) {
         programs.append(program)

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum Speed: Int {
+enum Speed: Int, Codable {
     case walk = 0
     case slow
     case easy

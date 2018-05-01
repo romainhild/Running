@@ -90,6 +90,7 @@ class ViewController: UIViewController {
                 self.program.name = name
                 let programsSaved = ProgramsSaved.shared
                 programsSaved.replaceProgram(at: index, with: self.program)
+                programsSaved.savePrograms()
                 self.indexProgram = index
             }
             alertController.addAction(saveAction)
@@ -101,6 +102,7 @@ class ViewController: UIViewController {
                 self.program.name = name
                 let programsSaved = ProgramsSaved.shared
                 programsSaved.addProgram(self.program)
+                programsSaved.savePrograms()
                 self.indexProgram = programsSaved.programs.count-1
             }
             alertController.addAction(saveAction)

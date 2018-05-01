@@ -207,9 +207,9 @@
 		AB31ECEE2097922700319BAE /* Swift */ = {
 			isa = PBXGroup;
 			children = (
+				AB31ECE52097915500319BAE /* Speed.swift */,
 				AB9176B7209785B30078400A /* Program.swift */,
 				AB31ECE72097919000319BAE /* ProgramsSaved.swift */,
-				AB31ECE52097915500319BAE /* Speed.swift */,
 				AB31ECE9209791BF00319BAE /* Misc.swift */,
 			);
 			path = Swift;

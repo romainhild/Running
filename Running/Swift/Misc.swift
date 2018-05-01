@@ -8,6 +8,17 @@
 
 import Foundation
 
+func documentsDirectory() -> URL {
+    let paths = FileManager.default.urls(for: .documentDirectory,
+                                         in: .userDomainMask)
+    return paths[0]
+}
+
+func dataFilePath() -> URL {
+    return documentsDirectory().appendingPathComponent("Running.plist")
+}
+
+
 func intToTime(time: Int) -> String {
     let m: Int = time/60
     let s: Int = time % 60

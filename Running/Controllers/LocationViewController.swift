@@ -12,16 +12,44 @@ import MapKit
 
 class LocationViewController: UIViewController {
 
-    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var walkLabel: UILabel!
+    @IBOutlet weak var slowLabel: UILabel!
+    @IBOutlet weak var easyLabel: UILabel!
+    @IBOutlet weak var hardLabel: UILabel!
     
-    let locationManager = CLLocationManager()
-    var allLocations: [CLLocation] = []
-    var isReceivingUpdates: Bool = false
+    var allLocations: [([CLLocation],Speed)] = []
+    var walkSpeed: Double { return averageSpeed(loc: locationsForSpeed(speed: .walk)) }
+    var slowSpeed: Double { return averageSpeed(loc: locationsForSpeed(speed: .slow)) }
+    var easySpeed: Double { return averageSpeed(loc: locationsForSpeed(speed: .easy)) }
+    var hardSpeed: Double { return averageSpeed(loc: locationsForSpeed(speed: .hard)) }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        self.navigationItem.hidesBackButton = true
+        let newBackButton = UIBarButtonItem(title: "Back", style: UIBarButtonItemStyle.plain, target: self, action: #selector(LocationViewController.back(sender:)))
+        self.navigationItem.leftBarButtonItem = newBackButton
+        
+        var maprect: MKMapRect = MKMapRectNull
+        for (locs, s) in allLocations {
+            let poly = SpeedPolyline(coordinates: locs.map {$0.coordinate}, count: locs.count)
+            poly.speed = s
+            mapView.add(poly)
+            maprect = MKMapRectUnion(maprect, poly.boundingMapRect)
+        }
+        if !MKMapRectIsNull(maprect) {
+            let midx = MKMapRectGetMidX(maprect)
+            let midy = MKMapRectGetMidY(maprect)
+            let midCoord = MKCoordinateForMapPoint(MKMapPointMake(midx, midy))
+            let region = MKCoordinateRegionMakeWithDistance(midCoord, 1000, 1000)
+            mapView.setRegion(mapView.regionThatFits(region), animated: true)
+        }
+        
+        walkLabel.text = String(format: "Walk: %.2f km/h", walkSpeed*3.6)
+        slowLabel.text = String(format: "Slow: %.2f km/h", slowSpeed*3.6)
+        easyLabel.text = String(format: "Easy: %.2f km/h", easySpeed*3.6)
+        hardLabel.text = String(format: "Hard: %.2f km/h", hardSpeed*3.6)
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,66 +57,30 @@ class LocationViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func getLoc(_ sender: Any) {
-        if !isReceivingUpdates {
-            let authStatus = CLLocationManager.authorizationStatus()
-            if authStatus == .notDetermined {
-                locationManager.requestAlwaysAuthorization()
-                return
-            }
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-            locationManager.activityType = .fitness
-            locationManager.startUpdatingLocation()
+    @objc func back(sender: UIBarButtonItem) {
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    func locationsForSpeed(speed: Speed) -> [CLLocation] {
+        return allLocations.filter{$0.1 == speed}.map{$0.0}.reduce([]){$0 + $1}
+    }
+    
+    func averageSpeed(loc: [CLLocation]) -> Double {
+        if loc.count == 0 {
+            return 0
         } else {
-            isReceivingUpdates = false
-            locationManager.stopUpdatingLocation()
-            let lastCoord = allLocations.last!.coordinate
-            var otherLocations = [lastCoord]
-            for i in 1...100 {
-                otherLocations.append(CLLocationCoordinate2DMake(CLLocationDegrees(lastCoord.latitude + (48.567366-lastCoord.latitude)*Double(i)/100.0), CLLocationDegrees(lastCoord.longitude + (7.767551-lastCoord.longitude)*Double(i)/100.0)))
-            }
-            let myPolyline = MKPolyline(coordinates: otherLocations, count: otherLocations.count)
-            mapView.add(myPolyline)
-            
+            return (loc.reduce(0) {$0+$1.speed})/Double(loc.count)
         }
-    }
-    
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
-}
-
-extension LocationViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("didFailWithError \(error)")
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        isReceivingUpdates = true
-        let newLocation = locations.last!
-        allLocations.append(newLocation)
-        let region = MKCoordinateRegionMakeWithDistance(newLocation.coordinate, 1000, 1000)
-        mapView.setRegion(mapView.regionThatFits(region), animated: true)
-        
-        print("didUpdateLocations[\(locations.count)] \(newLocation)")
     }
 }
 
 extension LocationViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        print("render")
-        if overlay is MKPolyline{
-            print("polyline")
+        if overlay is SpeedPolyline{
             let lineView = MKPolylineRenderer(overlay: overlay)
-            lineView.strokeColor = UIColor.green
+            let speedOverlay = overlay as! SpeedPolyline
+            lineView.strokeColor = speedOverlay.speed!.color()
             return lineView
         } else {
             return MKOverlayRenderer()

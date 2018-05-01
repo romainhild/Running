@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import CoreLocation
 
 class TableViewController: UITableViewController {
     var soundsId: [Speed: SystemSoundID] = [:]
@@ -19,6 +20,10 @@ class TableViewController: UITableViewController {
     var counter = 0.0
     var counterFromStart: Int = 0
     var isRunning = false
+    
+    let locationManager = CLLocationManager()
+    var allLocations: [([CLLocation],Speed)] = []
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +38,20 @@ class TableViewController: UITableViewController {
         }
         if program.count == 0 {
             self.navigationItem.rightBarButtonItem?.isEnabled = false
+        } else {
+            self.allLocations.append(([],program[0].1))
         }
         self.navigationItem.title = program.name
+        
+        let authStatus = CLLocationManager.authorizationStatus()
+        if authStatus == .notDetermined {
+            locationManager.requestAlwaysAuthorization()
+            return
+        }
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.activityType = .fitness
+        locationManager.allowsBackgroundLocationUpdates = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,15 +60,22 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func startRunning(_ sender: Any) {
+//        performSegue(withIdentifier: "locationSegue", sender: nil)
         if !isRunning {
             timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
             playSpeed(speed: program[index].1)
             isRunning = true
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .pause, target: self, action: #selector(startRunning(_:)))
+            if CLLocationManager.authorizationStatus() == .authorizedAlways {
+                locationManager.startUpdatingLocation()
+            }
         } else {
             timer.invalidate()
             isRunning = false
             self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(startRunning(_:)))
+            if CLLocationManager.authorizationStatus() == .authorizedAlways {
+                locationManager.stopUpdatingLocation()
+            }
         }
     }
     
@@ -60,23 +84,32 @@ class TableViewController: UITableViewController {
         let cell1 = tableView.cellForRow(at: IndexPath(row: 1, section: 0))
         counter += timeInterval
         if counter >= Double(program[index].0) {
-            index += 1
             counterFromStart += Int(counter)
             counter = 0.0
-            if index < program.count {
-                playSpeed(speed: program[index].1)
+            if index+1 < program.count {
+                playSpeed(speed: program[index+1].1)
+                allLocations.append(([],program[index+1].1))
             } else {
+                locationManager.stopUpdatingLocation()
                 timer.invalidate()
                 counter = Double(counterFromStart)
                 counterFromStart = 0
                 self.navigationItem.rightBarButtonItem?.isEnabled = false
+                performSegue(withIdentifier: "locationSegue", sender: nil)
             }
-            //self.program.remove(at: 0)
+            index += 1
             self.tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
             self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
         }
         cell0?.textLabel?.text = intToTime(time: self.counterFromStart)
         cell1?.textLabel?.text = doubleToTime(time: self.counter)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "locationSegue" {
+            let locView = segue.destination as? LocationViewController
+            locView?.allLocations = self.allLocations
+        }
     }
     
     func playSpeed(speed: Speed) {
@@ -133,3 +166,16 @@ class TableViewController: UITableViewController {
         }
     }
 }
+
+extension TableViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("didFailWithError \(error)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let newLocation = locations.last!
+        allLocations[index].0.append(newLocation)
+        print("didUpdateLocations[\(locations.count)] \(newLocation)")
+    }
+}
+

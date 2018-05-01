@@ -28,7 +28,7 @@ class RunGestureRecognizer: UIGestureRecognizer {
             angleP = angleR+2*CGFloat.pi
         }
         let a = Int(angleP/delta)
-        if a < 7 {
+        if a < 13 {
             return a
         } else if a < 22 {
             return a + a%2

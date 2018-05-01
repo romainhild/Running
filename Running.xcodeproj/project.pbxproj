@@ -24,6 +24,7 @@
 		AB31ECE82097919000319BAE /* ProgramsSaved.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31ECE72097919000319BAE /* ProgramsSaved.swift */; };
 		AB31ECEA209791BF00319BAE /* Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31ECE9209791BF00319BAE /* Misc.swift */; };
 		AB31ECEC209791F600319BAE /* RadiusLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31ECEB209791F600319BAE /* RadiusLayer.swift */; };
+		AB31ECF12098771F00319BAE /* LocationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB31ECF02098771F00319BAE /* LocationViewController.swift */; };
 		AB9176AB209709BB0078400A /* ChevronView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176A5209709BA0078400A /* ChevronView.swift */; };
 		AB9176AC209709BB0078400A /* ChevronLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB9176A6209709BA0078400A /* ChevronLayer.swift */; };
 		AB9176AD209709BB0078400A /* ChevronView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AB9176A7209709BA0078400A /* ChevronView.xib */; };
@@ -77,6 +78,7 @@
 		AB31ECE72097919000319BAE /* ProgramsSaved.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgramsSaved.swift; sourceTree = "<group>"; };
 		AB31ECE9209791BF00319BAE /* Misc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Misc.swift; sourceTree = "<group>"; };
 		AB31ECEB209791F600319BAE /* RadiusLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadiusLayer.swift; sourceTree = "<group>"; };
+		AB31ECF02098771F00319BAE /* LocationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewController.swift; sourceTree = "<group>"; };
 		AB9176A5209709BA0078400A /* ChevronView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronView.swift; sourceTree = "<group>"; };
 		AB9176A6209709BA0078400A /* ChevronLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChevronLayer.swift; sourceTree = "<group>"; };
 		AB9176A7209709BA0078400A /* ChevronView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChevronView.xib; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				AB1B63712093681A00D52B95 /* ViewController.swift */,
 				AB1B639D2093692000D52B95 /* TableViewController.swift */,
 				AB31ECE320978C9400319BAE /* ProgramsViewController.swift */,
+				AB31ECF02098771F00319BAE /* LocationViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB31ECF12098771F00319BAE /* LocationViewController.swift in Sources */,
 				AB9176AB209709BB0078400A /* ChevronView.swift in Sources */,
 				AB9176B320970DB00078400A /* RunGestureRecognizer.swift in Sources */,
 				AB1B63722093681A00D52B95 /* ViewController.swift in Sources */,

@@ -74,7 +74,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Run"/>
                                         <connections>
-                                            <segue destination="hih-Z1-IJ5" kind="show" identifier="runningSegue" id="4BS-ut-pAt"/>
+                                            <segue destination="zxZ-iC-wBB" kind="show" identifier="locationSegue" id="B5h-6Z-YwS"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -151,6 +151,56 @@
             </objects>
             <point key="canvasLocation" x="2432.8000000000002" y="196.55172413793105"/>
         </scene>
+        <!--Location View Controller-->
+        <scene sceneID="Usa-hA-j6o">
+            <objects>
+                <viewController id="zxZ-iC-wBB" customClass="LocationViewController" customModule="Running" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yfp-ZI-FCM">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hCT-Kr-pUj">
+                                <rect key="frame" x="143" y="72" width="88" height="30"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Sz-Se-e5v">
+                                        <rect key="frame" x="0.0" y="0.0" width="42" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EQ7-jy-c51">
+                                        <rect key="frame" x="42" y="0.0" width="46" height="30"/>
+                                        <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="getLoc:" destination="zxZ-iC-wBB" eventType="touchUpInside" id="i6M-9b-Bj9"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="RJH-Ch-uA0">
+                                <rect key="frame" x="16" y="110" width="343" height="537"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <connections>
+                                    <outlet property="delegate" destination="zxZ-iC-wBB" id="gUn-O6-pfo"/>
+                                </connections>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="hCT-Kr-pUj" firstAttribute="top" secondItem="lzG-Kc-VgK" secondAttribute="top" constant="8" id="48e-zO-jed"/>
+                            <constraint firstItem="hCT-Kr-pUj" firstAttribute="centerX" secondItem="yfp-ZI-FCM" secondAttribute="centerX" id="e7b-Ua-Xlk"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="lzG-Kc-VgK"/>
+                    </view>
+                    <connections>
+                        <outlet property="label" destination="6Sz-Se-e5v" id="dOb-zT-ZeZ"/>
+                        <outlet property="mapView" destination="RJH-Ch-uA0" id="vxn-8L-tiq"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GjF-zH-zen" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3392.8000000000002" y="-530.28485757121439"/>
+        </scene>
         <!--Run-->
         <scene sceneID="rtb-U9-SBa">
             <objects>
@@ -188,7 +238,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n8i-fS-1eE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2989" y="197"/>
+            <point key="canvasLocation" x="3393" y="197"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="pwP-8E-n37">
@@ -260,7 +310,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I1b-4B-2qV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2989" y="1019"/>
+            <point key="canvasLocation" x="3393" y="1019"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="5Q0-wm-V5q">

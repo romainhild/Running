@@ -55,8 +55,8 @@ class TableViewController: UITableViewController {
         }
         self.navigationItem.title = program.name
         
-        let authStatus = CLLocationManager.authorizationStatus()
-        if authStatus == .notDetermined {
+        if CLLocationManager.authorizationStatus() != .authorizedAlways {
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
             locationManager.requestAlwaysAuthorization()
             return
         }
@@ -107,35 +107,36 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func startRunning(_ sender: Any) {
-        if !isRunning {
-            startDate = Date(timeIntervalSinceNow: 0)
-            timer = Timer.scheduledTimer(timeInterval: timerInterval, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-            playSpeed(speed: program[index].1)
-            isRunning = true
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .pause, target: self, action: #selector(startRunning(_:)))
-//            if CLLocationManager.authorizationStatus() == .authorizedAlways {
-                locationManager.startUpdatingLocation()
-//            }
-        } else {
-            timer.invalidate()
-            isRunning = false
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(startRunning(_:)))
-//            if CLLocationManager.authorizationStatus() == .authorizedAlways {
-                locationManager.stopUpdatingLocation()
-//            }
-        }
+        startDate = Date(timeIntervalSinceNow: 0)
+        locationManager.startUpdatingLocation()
+        timer = Timer.scheduledTimer(timeInterval: timerInterval, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        playSpeed(speed: program[index].1)
+        isRunning = true
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .pause, target: self, action: #selector(pauseRunning(_:)))
+    }
+    
+    @IBAction func pauseRunning(_ sender: Any) {
+        locationManager.stopUpdatingLocation()
+        timer.invalidate()
+        isRunning = false
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self,
+                                                                 action: #selector(startRunning(_:)))
     }
     
     @objc func updateTimer() {
         counter += timerInterval
-        self.advanceCounter()
+        if self.advanceIndex() {
+            self.tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+            self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+        }
         let cell0 = tableView.cellForRow(at: IndexPath(row: 0, section: 0))
         let cell1 = tableView.cellForRow(at: IndexPath(row: 1, section: 0))
         cell0?.textLabel?.text = intToTime(time: self.counterFromStart)
         cell1?.textLabel?.text = doubleToTime(time: self.counter)
     }
     
-    func advanceCounter() {
+    @discardableResult
+    func advanceIndex() -> Bool {
         if counter >= Double(program[index].0) {
             counterFromStart += program[index].0
             counter = 0.0
@@ -146,10 +147,9 @@ class TableViewController: UITableViewController {
                 self.isFinish = true
             }
             index += 1
-            if isForeground {
-                self.tableView.deleteRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
-                self.tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
-            }
+            return true
+        } else {
+            return false
         }
     }
     
@@ -214,6 +214,12 @@ class TableViewController: UITableViewController {
 }
 
 extension TableViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedAlways {
+            self.navigationItem.rightBarButtonItem?.isEnabled = true
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("didFailWithError \(error)")
     }
@@ -225,7 +231,7 @@ extension TableViewController: CLLocationManagerDelegate {
             if !isForeground && newLocation.timestamp.compare(startDate) == .orderedDescending {
                 counter += newLocation.timestamp.timeIntervalSince(startDate)
                 startDate = newLocation.timestamp
-                self.advanceCounter()
+                self.advanceIndex()
             }
         }
     }
